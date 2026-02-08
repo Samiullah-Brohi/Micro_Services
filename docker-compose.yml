@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  productservice:
+    build:
+      context: ./Micro_Services
+    container_name: productservice
+    ports:
+      - "5001:8282"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8282
+    # healthcheck:  # Uncomment and adjust when you add proper /health endpoint in code
+    #   test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]  # Simple check (requires curl installed)
+    #   interval: 20s
+    #   timeout: 5s
+    #   retries: 10
+    #   start_period: 10s
+    networks:
+      - app-network
+
+  orderservice:
+    build:
+      context: ./OrderService
+    container_name: orderservice
+    ports:
+      - "5002:8181"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8181
+      - PRODUCT_SERVICE_URL=http://apigateway:80/products  # Fixed: uses correct service name
+    depends_on:
+      - productservice  # Basic ordering
+    networks:
+      - app-network
+
+  apigateway:
+    build:
+      context: ./ApiGateway
+    container_name: apigateway
+    ports:
+      - "5000:8082"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8082
+    depends_on:
+      - productservice  # Basic ordering (no healthy wait)
+      - orderservice
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

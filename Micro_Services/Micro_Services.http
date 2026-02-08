@@ -1,0 +1,6 @@
+@Micro_Services_HostAddress = https://localhost:7160/api
+
+GET {{Micro_Services_HostAddress}}/products/
+Accept: application/json
+
+###
