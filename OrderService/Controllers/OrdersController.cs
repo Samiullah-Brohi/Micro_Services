@@ -8,7 +8,7 @@ namespace OrderService.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly HttpClient _http;
-
+        private string mytest = "";
 
         public OrdersController(HttpClient http)
         {
