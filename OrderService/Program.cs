@@ -2,7 +2,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient();
 
-var productBaseUrl = builder.Configuration["PRODUCT_SERVICE_URL"]  ?? "http://localhost:5001";  // or direct for local non-Docker runs
+var productBaseUrl = builder.Configuration["PRODUCT_SERVICE_URL"]  ?? "http://localhost:5001/swagger/index.html";  // or direct for local non-Docker runs
 
 builder.Services.AddHttpClient("ProductClient", client =>
 {
@@ -22,11 +22,14 @@ var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 //app.UseHttpsRedirection();
 

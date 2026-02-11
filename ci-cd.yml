@@ -1,0 +1,34 @@
+name: .NET Core CI/CD to Local IIS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted   # your local PC runner
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'   # match your project version
+
+    - name: Restore
+      run: dotnet restore Micro_Services.sln
+
+    - name: Build
+      run: dotnet build Micro_Services.sln --configuration Release --no-restore
+
+    - name: Publish ApiGateway
+      run: dotnet publish ApiGateway/ApiGateway.csproj -c Release -o C:\inetpub\ApiGateway
+
+    - name: Publish ProductService
+      run: dotnet publish ProductService/ProductService.csproj -c Release -o C:\inetpub\ProductService
+
+    - name: Publish OrderService
+      run: dotnet publish OrderService/OrderService.csproj -c Release -o C:\inetpub\OrderService

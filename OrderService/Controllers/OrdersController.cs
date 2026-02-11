@@ -8,7 +8,7 @@ namespace OrderService.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly HttpClient _http;
-
+        private string mytest = "";
 
         public OrdersController(HttpClient http)
         {
@@ -19,7 +19,7 @@ namespace OrderService.Controllers
         [HttpGet]
         public async Task<string> Get()
         {
-            var products = await _http.GetStringAsync("http://productservice/api/products");
+            var products = await _http.GetStringAsync("http://localhost:5001/api/products");
            // var products = await _http.GetStringAsync("https://localhost:7160/api/products");
             return $"Order created for: {products}";
         }
