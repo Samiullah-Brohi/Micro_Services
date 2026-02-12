@@ -19,6 +19,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{575A6D24-0C6E-4C14-9064-D1CD1F6F604B}"
 	ProjectSection(SolutionItems) = preProject
 		ci-cd.yml = ci-cd.yml
+		deploy-to-iis.yml = deploy-to-iis.yml
 	EndProjectSection
 EndProject
 Global
