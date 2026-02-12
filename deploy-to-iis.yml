@@ -1,0 +1,40 @@
+name: Deploy Microservices to Local IIS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'   # change if using 6 or 7
+
+    - name: Restore Dependencies
+      run: dotnet restore
+
+    - name: Build Solution
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Stop IIS
+      run: iisreset /stop
+
+    - name: Publish ProductService
+      run: dotnet publish ./ProductService/ProductService.csproj -c Release -o "C:\inetpub\wwwroot\ProductService"
+
+    - name: Publish OrderService
+      run: dotnet publish ./OrderService/OrderService.csproj -c Release -o "C:\inetpub\wwwroot\OrderService"
+
+    - name: Publish ApiGateway
+      run: dotnet publish ./ApiGateway/ApiGateway.csproj -c Release -o "C:\inetpub\wwwroot\ApiGateway"
+
+    - name: Start IIS
+      run: iisreset /start
