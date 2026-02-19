@@ -7,22 +7,19 @@ namespace OrderService.Controllers
     [Route("api/orders")]
     public class OrdersController : ControllerBase
     {
-        private readonly HttpClient _http;
-        private string mytest = "";
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public OrdersController(HttpClient http)
+        public OrdersController(IHttpClientFactory httpClientFactory)
         {
-            _http = http;
-
+            _httpClientFactory = httpClientFactory;
         }
 
         [HttpGet]
         public async Task<string> Get()
         {
-            var products = await _http.GetStringAsync("http://localhost:5001/api/products");
-           // var products = await _http.GetStringAsync("https://localhost:7160/api/products");
+            var client = _httpClientFactory.CreateClient("ProductClient");
+            var products = await client.GetStringAsync("/api/products");
             return $"Order created for: {products}";
         }
-
     }
 }

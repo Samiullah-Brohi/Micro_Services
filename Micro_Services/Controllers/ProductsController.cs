@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace Micro_Services.Controllers
 {
-    
     [ApiController]
     [Route("api/products")]
     public class ProductsController : ControllerBase
@@ -15,12 +14,11 @@ namespace Micro_Services.Controllers
             return new[] { "Laptop", "Phone", "Tablet" };
         }
 
-        public IEnumerable<string> GetByName(string ProductName)
+        [HttpGet("{productName}")]
+        public IEnumerable<string> GetByName(string productName)
         {
-
             var products = new[] { "Laptop", "Phone", "Tablet" };
-            var filteredProducts = products.Where(p => p.Contains(ProductName, StringComparison.OrdinalIgnoreCase));
-
+            var filteredProducts = products.Where(p => p.Contains(productName, StringComparison.OrdinalIgnoreCase));
             return filteredProducts;
         }
     }
